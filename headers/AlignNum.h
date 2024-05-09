@@ -1,11 +1,12 @@
 #pragma once
 #include <stdexcept>
 #include "FreeList.h"
+// #include "ThreadCache.h"
 
-class AlignNumTools {
+#define MAX_BYTES (256 * 1024)
+
+class AlignNum {
 public:
-    
-
 private:
     static size_t GetAlignNum(std::size_t bytes) {
         if(bytes <= 128) { // 8B 对齐
@@ -80,7 +81,6 @@ public:
         std::size_t alignNum = GetAlignNum(bytes);
         if(bytes % alignNum == 0) return bytes;
         return (bytes / alignNum + 1) * alignNum;
-        
 
     }
 };

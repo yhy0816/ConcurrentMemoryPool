@@ -6,9 +6,8 @@
 #include <stdexcept>
 
 // 自由链表个数
-#define FREELIST_NUM 208
-// ThreadCache单次申请最大字节数
-#define MAX_BYTES 256 * 1024
+#define FREELIST_NUM (208)
+
 
 // 管理切分好的小对象的自由链表
 class FreeList {
@@ -32,23 +31,3 @@ private:
 };
 
 
-// 管理切分好的小对象的自由链表
-template<std::size_t SIZE>
-class FreeListSet {
-
-public:
-
-    // FreeList& operator[](size_t bytes);
-
-
-    inline FreeList& Get(std::size_t idx) {
-        if(idx >= SIZE) 
-            throw std::invalid_argument("arg range error");
-        return _freeLists[idx];
-    }
-
-
-private:
-    FreeList _freeLists[SIZE];
-
-};

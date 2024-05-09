@@ -1,25 +1,28 @@
 #include <iostream>
-#include "headers/Tools.h"
+#include <thread>
+#include "headers/ConcurrentAlloc.h"
 
 using namespace std;
 
-int main(int, char**){
-    // int tmp;
-    // tmp = rand() % 128 + 1;
-    // cout << tmp << " ";
-    // cout << AlignNumTools::Index(tmp) << endl;
-    // tmp = rand() % 1024 + 129;
-    // cout << tmp << " ";
-    // cout << AlignNumTools::Index(tmp) << endl;
-    // tmp = rand() % (8 * 1024) + 1025;
-    // cout << tmp << " ";
-    // cout << AlignNumTools::Index(tmp) << endl;
-    // tmp = rand() % (64 * 1024) + 8 * 1024 + 1;
-    // cout << tmp << " ";
-    // cout << AlignNumTools::Index(tmp) << endl;
-    // tmp = rand() % (256 * 1024) + 64 * 1024 + 1;
-    // cout << tmp << " ";
-    // cout << AlignNumTools::Index(tmp) << endl;
+void Alloc1() {
+    for(int i = 1; i <= 5; i++) 
+        ConcurrentAlloc(6);
+}
 
+
+void Alloc2() {
+    for(int i = 1; i <= 5; i++) 
+        ConcurrentAlloc(7);
+}
+
+void Test() {
+    std::thread t1(Alloc1);
+    std::thread t2(Alloc2);
+    t1.join();
+    t2.join();
+}
+
+int main(int, char**){
+    Test();
 
 }

@@ -11,6 +11,8 @@ add_executable(ConcurrentMemoryPool
                 Tools.cpp
                 FreeList.cpp
                 ThreadCache.cpp
+                ConcurrentAlloc.cpp
+                
                 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

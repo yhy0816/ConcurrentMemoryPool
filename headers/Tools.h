@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdexcept>
-#include "AlignNumTools.h"
+#include "AlignNum.h"
 #ifdef __linux__ 
     #include <unistd.h>
 #else 
