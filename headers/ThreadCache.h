@@ -13,15 +13,14 @@ public:
     // 线程释放空间
     void Deallocate(void* obj, std::size_t size);
     // 向 CentralCache 申请空间的接口
-    void* FetchFromCentralCache(std::size_t size, std::size_t alignSize);
+    void* FetchFromCentralCache(std::size_t index, std::size_t alignSize);
 
 
 private:
 
     FreeList freeLists[FREELIST_NUM];
+    // 存储freeList的哈希表
 
-// public:
-    // static const std::size_t MAX_BYTES;
 
 };
 

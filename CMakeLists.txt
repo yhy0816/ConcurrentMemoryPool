@@ -6,12 +6,13 @@ enable_testing()
 
 
 add_executable(ConcurrentMemoryPool 
-
-                main.cpp
-                Tools.cpp
-                FreeList.cpp
-                ThreadCache.cpp
+                CentralCache.cpp
                 ConcurrentAlloc.cpp
+                FreeList.cpp
+                main.cpp
+                SpanList.cpp
+                ThreadCache.cpp
+                Tools.cpp
                 
                 )
 

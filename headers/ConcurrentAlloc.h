@@ -1,3 +1,4 @@
+#pragma once
 #include "ThreadCache.h"
 #include <iostream>
 
