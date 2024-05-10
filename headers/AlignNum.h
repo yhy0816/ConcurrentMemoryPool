@@ -68,10 +68,7 @@ public:
         const int bases[5] = { 0, 16, 72, 128, 184};
 
         std::size_t alignNum = GetAlignNum(bytes);
-        int off;
-        if(bytes % alignNum == 0) off = (bytes - 1) / alignNum;
-        else off = bytes / alignNum + 1; // 计算 这个字节数 相对于它开始第一个桶的偏移量
-
+        int off = (RoundUp(bytes) - 1) / alignNum ;
         return bases[IndexHandle(bytes)] + off;
         
     }
@@ -81,8 +78,6 @@ public:
         std::size_t alignNum = GetAlignNum(bytes);
         if(bytes % alignNum == 0) return bytes;
         return (bytes / alignNum + 1) * alignNum;
-
     }
-
-    
+   
 };

@@ -2,7 +2,7 @@
 #include "headers/ThreadCache.h"
 
 void* ConcurrentAlloc(size_t size) {
-    std::cout << "ConcurrentAlloc" << std::endl;
+    // std::cout << "ConcurrentAlloc" << std::endl;
     return TLSThreadCache.Allocate(size);
 }
 

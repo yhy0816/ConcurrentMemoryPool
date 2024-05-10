@@ -11,7 +11,8 @@ public:
     static inline CentralCache* getInstance() {
         return &centralCache;
     }
-    size_t fetchRangeObj(size_t size, size_t batchNum, void*& start, void*& end);
+    size_t fetchRangeObj(size_t index, size_t size, size_t batchNum, void*& start, void*& end);
+    Span* getASpan(size_t index, size_t size);
 
 private:
     CentralCache() = default;

@@ -1,13 +1,31 @@
 #include "headers/SpanList.h"
 #include <stdexcept>
-
+#include <iostream>
 
 SpanList::SpanList() {
-        // 虚头节点
-        head = new Span();
-        // 双向循环链表，所以要相连
-        head->pre = head;
-        head->next = head;
+    // 虚头节点
+    head = new Span();
+    // 双向循环链表，所以要相连
+    head->pre = head;
+    head->next = head;
+
+
+}
+
+
+Span* Span::split(size_t k) {
+    //新建一个kspan
+    Span* kspan = new Span;
+    kspan->pageId = this->pageId;
+    kspan->pageNum = k;
+    this->pageId += k;
+    this->pageNum -= k;
+    // std::cout << " kspan->pageNum:" << kspan->pageNum << std::endl;
+    return kspan;
+}
+
+bool SpanList::Empty() {
+    return head->next == head;
 }
 
 void SpanList::Insert(Span* pos, Span* node) {
@@ -25,6 +43,12 @@ void SpanList::Insert(Span* pos, Span* node) {
     node->next = pos;
 
 }
+
+
+void SpanList::PushFront(Span* node) {
+    Insert(head->next, node);
+}
+
 void SpanList::Erase(Span* pos){
     if(pos == nullptr) {
         throw std::invalid_argument("arg nullptr error");
@@ -39,4 +63,24 @@ void SpanList::Erase(Span* pos){
     
     // pos 不需要 delete 删除 而是一会要回收
     //TODO 回收逻辑
+}
+Span* SpanList::PopFront() {
+    if(this->Empty()) return nullptr;
+    Span* ret = head->next;
+    this->Erase(ret);
+    return ret;
+}
+
+Span* SpanList::getANotNULLSpan() {
+    if(this->Empty()) return nullptr;
+    Span* cur = head->next; // 双向循环链表
+
+    while(cur) {
+        if(!(cur->freeList.Empty())) {
+            return cur;
+        }
+        cur = cur->next;
+    }
+
+    return nullptr;
 }

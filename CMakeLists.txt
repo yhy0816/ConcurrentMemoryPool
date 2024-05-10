@@ -10,6 +10,7 @@ add_executable(ConcurrentMemoryPool
                 ConcurrentAlloc.cpp
                 FreeList.cpp
                 main.cpp
+                PageCache.cpp
                 SpanList.cpp
                 ThreadCache.cpp
                 Tools.cpp

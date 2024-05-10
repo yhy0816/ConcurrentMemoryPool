@@ -27,9 +27,10 @@ void FreeList::PushRange(void* start, void* end) {
 
 size_t FreeList::PopRange(size_t popNum, void*& start, void*& end) {
     // if(_free_list_head == nullptr) 
+    
+    if(_free_list_head == nullptr) return 0; // 没有节点直接返回
     start = _free_list_head;
     end = _free_list_head;
-    if(end == nullptr) return 0; // 没有节点直接返回
     size_t count = 1;
     for(int i = 1; i < popNum ; i++) {
         void* next = NextObj(end);

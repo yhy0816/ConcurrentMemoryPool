@@ -2,7 +2,7 @@
 #include "headers/AlignNum.h"
 #include "headers/CentralCache.h"
 #include "headers/FreeList.h"
-// #include <iostream>
+#include <iostream>
 #include <stdexcept>
 
 // const std::size_t ThreadCache::MAX_BYTES = 256 * 1024;
@@ -12,6 +12,7 @@ void* ThreadCache::Allocate(std::size_t bytes) {
             throw std::invalid_argument("arg range error");
     size_t index = AlignNum::Index(bytes);
     size_t alignSize = AlignNum::RoundUp(bytes);
+
     if(freeLists[index].Empty()) {
         return FetchFromCentralCache(index, alignSize); 
     } 
@@ -42,14 +43,18 @@ void* ThreadCache::FetchFromCentralCache(std::size_t index, std::size_t alignSiz
 
     // std::cout << "size : " << size << "alignSize: " << alignSize << std::endl;
 
+
+
+    size_t batchNum = freeLists[index].get_maxSize();
+    std::cout << "batchNum " << batchNum << std::endl;
+    std::cout << "index " << index << std::endl;
     if(freeLists[index].get_maxSize() < numMoveSize(alignSize)) { // 每申请一次maxSize + 1;
         freeLists[index].get_maxSize()++;                               //  达到上限就不加了 
     }
-    size_t batchNum = freeLists[index].get_maxSize();
     void* start;
     void* end;
     //从cc 申请空间
-    CentralCache::getInstance()->fetchRangeObj(index, batchNum, start, end);
+    CentralCache::getInstance()->fetchRangeObj(index, alignSize, batchNum, start, end);
     
     // start 返回，NextObj(start), end 插入 freeLists[index] 桶 中
     freeLists[index].PushRange(FreeList::NextObj(start), end); 
