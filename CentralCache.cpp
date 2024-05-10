@@ -1,9 +1,9 @@
 #include "headers/CentralCache.h"
 #include "headers/FreeList.h"
 #include "headers/PageCache.h"
-#include "headers/ThreadCache.h"
+
 #include "headers/PageCache.h"
-#include <iostream>
+
 CentralCache CentralCache::centralCache = CentralCache(); 
 
 
@@ -11,13 +11,13 @@ CentralCache CentralCache::centralCache = CentralCache();
 //从spanLists[index] 中找到一个管理非空链表的span, 如果没有，就去下层申请
 Span* CentralCache::getASpan(size_t index, size_t size) {
     //...
-    Span* aSpan = spanLists[index].getANotNULLSpan();
+    Span* aSpan = spanLists[index].getFirstNotNULLSpan();
     if(aSpan != nullptr) {
         return aSpan;
     }
     //走到这里还没返回的话就去申请了
 
-    spanLists[index].mtx.unlock();
+    spanLists[index].mtx.unlock(); // 这里先把桶锁解开因为后边要去pc申请空间
 
     size_t pageNum = PageCache::getPageNum(size, index);
     //执行NewSpan时要给整个pageCache加锁
@@ -36,7 +36,7 @@ Span* CentralCache::getASpan(size_t index, size_t size) {
     void* tail = start;
     cur += size;
     // std::cout << newSpan->pageId << " " << newSpan->pageNum<< std::endl;
-    while(tail < end) {
+    while(cur < end) {
         FreeList::NextObj(tail) = cur;
         cur += size;
         tail = FreeList::NextObj(tail);
@@ -53,12 +53,13 @@ size_t CentralCache::fetchRangeObj(size_t index, size_t size, size_t batchNum, v
     // CentralCache是所有线程共享的所以访问对应的桶要加锁
     spanLists[index].mtx.lock();
 
-    Span* span = getASpan(index, size); 
+    Span* span = getASpan(index, size); // 从 index 这个桶里取出一个 非空 的 span
+                                        // 这份span 下的链表管理的空间都是size大小的
 
-    size_t actualNum = span->freeList.PopRange(batchNum, start, end);
-
+    size_t actualNum = span->freeList.PopRange(batchNum, start, end); //从这个span中取出batchNum个size大小的内存块
+    span->usecount += actualNum;
     spanLists[index].mtx.unlock();
 
     return actualNum;
-    //TODO
+ 
 }

@@ -31,7 +31,7 @@ public:
     Span* PopFront();
     void Erase(Span* pos);
     bool Empty();
-    Span* getANotNULLSpan();
+    Span* getFirstNotNULLSpan();
 private:
     Span* head;
 public:

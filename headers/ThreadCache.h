@@ -1,5 +1,4 @@
 #pragma once
-#include "Tools.h"
 #include "FreeList.h"
 // ThreadCache单次申请最大字节数
 

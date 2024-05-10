@@ -46,8 +46,8 @@ void* ThreadCache::FetchFromCentralCache(std::size_t index, std::size_t alignSiz
 
 
     size_t batchNum = freeLists[index].get_maxSize();
-    std::cout << "batchNum " << batchNum << std::endl;
-    std::cout << "index " << index << std::endl;
+    // std::cout << "batchNum " << batchNum << std::endl;
+    // std::cout << "index " << index << std::endl;
     if(freeLists[index].get_maxSize() < numMoveSize(alignSize)) { // 每申请一次maxSize + 1;
         freeLists[index].get_maxSize()++;                               //  达到上限就不加了 
     }

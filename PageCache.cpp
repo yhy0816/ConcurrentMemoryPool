@@ -3,7 +3,7 @@
 #include "headers/Tools.h"
 #include <stdexcept>
 
-#include <iostream>
+
 
 PageCache PageCache::pageCache;
 

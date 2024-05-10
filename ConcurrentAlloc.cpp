@@ -7,7 +7,7 @@ void* ConcurrentAlloc(size_t size) {
 }
 
 void ConcurrentFree(void* ptr, size_t size) {
-    std::cout << "ConcurrentFree" << std::endl;
+   
     TLSThreadCache.Deallocate(ptr, size);
     
 }

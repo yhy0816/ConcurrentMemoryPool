@@ -1,6 +1,6 @@
 #include "headers/SpanList.h"
 #include <stdexcept>
-#include <iostream>
+
 
 SpanList::SpanList() {
     // 虚头节点
@@ -71,11 +71,11 @@ Span* SpanList::PopFront() {
     return ret;
 }
 
-Span* SpanList::getANotNULLSpan() {
+Span* SpanList::getFirstNotNULLSpan() {
     if(this->Empty()) return nullptr;
     Span* cur = head->next; // 双向循环链表
 
-    while(cur) {
+    while(cur && cur != head) {
         if(!(cur->freeList.Empty())) {
             return cur;
         }

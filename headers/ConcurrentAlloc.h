@@ -1,6 +1,6 @@
 #pragma once
-#include "ThreadCache.h"
-#include <iostream>
+
+#include <cstddef>
 
 void* ConcurrentAlloc(size_t size);
 

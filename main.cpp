@@ -1,7 +1,9 @@
+#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <thread>
 #include "headers/ConcurrentAlloc.h"
-
+#include "headers/AlignNum.h"
 using namespace std;
 
 void Alloc1() {
@@ -22,7 +24,7 @@ void Test() {
     t2.join();
 }
 
-void test2() {
+void test3() {
     void* ptr1 = ConcurrentAlloc(5);
     void* ptr2 = ConcurrentAlloc(8);
     void* ptr3 = ConcurrentAlloc(4);
@@ -37,21 +39,66 @@ void test2() {
 }
 
 void test1() {
-    void* ptr1 = malloc(5);
-    void* ptr2 = malloc(8);
-    void* ptr3 = malloc(4);
-    void* ptr4 = malloc(6);
-    void* ptr5 = malloc(3);
-    cout << ptr1 << endl;
-    cout << ptr2 << endl;
-    cout << ptr3 << endl;
-    cout << ptr4 << endl;
-    cout << ptr5 << endl;
+    
 
+    for(int i = 0; i < 50000; i++) {
+        
+        void* ptr = ConcurrentAlloc(256);
+        // cout << ptr << endl;
+    }
+    
+}
+
+
+void test2() {
+    
+
+   for(int i = 0; i < 50000; i++) {
+        
+        void* ptr = malloc(256);
+        // cout << ptr << endl;
+    }
+    
 }
 
 int main(int, char**){
-    // test1();
-    test2();
 
+    try{
+        using std::chrono::duration_cast, std::chrono::system_clock;
+        using std::chrono::milliseconds, std::chrono::seconds;
+        auto millisec1 = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+        thread t[100];
+        for(int i = 1; i < 10; i++){
+            t[i] = thread(test1);
+            cout << "-------------" << endl;
+        }
+        for(int i = 1; i < 10; i++) {
+            t[i].join();
+        }
+
+        auto millisec2 = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();    
+    
+        cout << millisec2 - millisec1 << endl;
+    
+        millisec1 = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+        // thread t[10];
+        for(int i = 1; i < 10; i++){
+            t[i] = thread(test2);
+            cout << "-------------" << endl;
+        }
+        for(int i = 1; i < 10; i++) {
+            t[i].join();
+        }
+        millisec2 = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();    
+
+        cout << millisec2 - millisec1 << endl;
+        cout << "-------------" << endl;
+    } catch (std::invalid_argument e){
+        cout << e.what() << endl;
+
+    } catch (...) {
+        cout << "..." << endl;
+    }
+    
 }

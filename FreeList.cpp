@@ -38,6 +38,7 @@ size_t FreeList::PopRange(size_t popNum, void*& start, void*& end) {
         end = next;
         count++;
     }
+    
     // 获取前popNum个节点，或节点数不足获取全部节点
     _free_list_head = NextObj(end);
     NextObj(end) = nullptr;
