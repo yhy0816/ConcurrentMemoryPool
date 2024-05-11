@@ -12,6 +12,28 @@ SpanList::SpanList() {
 
 }
 
+//与管理左侧相邻页的span进行合并
+Span* Span::lmerge(Span* neighbor) {
+
+    if(neighbor->pageId + neighbor->pageNum != this->pageId)
+        throw std::invalid_argument("lmerge arg error");
+
+    this->pageId = neighbor->pageId;
+    this->pageNum += neighbor->pageNum ;
+    delete neighbor;
+    return this;
+
+}
+//与管理右侧相邻页的span进行合并
+Span* Span::rmerge(Span* neighbor) {
+    if(this->pageId + this->pageNum != neighbor->pageId)
+        throw std::invalid_argument("lmerge arg error");
+
+    this->pageNum += neighbor->pageNum;
+    delete neighbor;
+    return this;
+}
+
 
 Span* Span::split(size_t k) {
     //新建一个kspan

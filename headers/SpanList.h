@@ -13,11 +13,16 @@ struct Span {
     Span* next = nullptr;
     FreeList freeList;
     size_t usecount = 0;
+    bool isUsed = false;
 
 //将Span拆分成k 和 pageNum - k 个页的span
 //当前Span变成 pageNum - k 的span 返回pageNum 为 k 的 span 指针
     Span* split(size_t k);
 
+    //与管理左侧相邻页的span进行合并
+    Span* lmerge(Span* neighbor);
+    //与管理右侧相邻页的span进行合并
+    Span* rmerge(Span* neighbor);
 };
 
 

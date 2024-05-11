@@ -1,6 +1,6 @@
 #include "headers/FreeList.h"
 
-
+#include <iostream>
 
 // 将被释放的对象头插到自由链表中
 void FreeList::push(void* obj) {
@@ -8,6 +8,7 @@ void FreeList::push(void* obj) {
         throw std::invalid_argument("arg is null");
     NextObj(obj) = this->_free_list_head;
     _free_list_head = obj;
+    size++;
 }
 
 // 将自由链表头节点分配出去
@@ -17,12 +18,15 @@ void* FreeList::pop() {
         throw std::invalid_argument("arg is null");
     void* obj = _free_list_head;
     _free_list_head = NextObj(obj);
+    size--;
     return obj;
 }
 
-void FreeList::PushRange(void* start, void* end) {
+void FreeList::PushRange(size_t batchNum, void* start, void* end) {
     NextObj(end) = _free_list_head;
     _free_list_head = start;
+    size += batchNum;
+
 }
 
 size_t FreeList::PopRange(size_t popNum, void*& start, void*& end) {
@@ -42,11 +46,30 @@ size_t FreeList::PopRange(size_t popNum, void*& start, void*& end) {
     // 获取前popNum个节点，或节点数不足获取全部节点
     _free_list_head = NextObj(end);
     NextObj(end) = nullptr;
+    size -= count;
     return count;
 }
 
-// // 根据bytes 作为索引 直接返回对应桶的引用
-// template<std::size_t SIZE>
-// FreeList& FreeListSet<SIZE>::operator[](size_t bytes) {
-//     return this->_freeLists[AlignNumTools::Index(bytes)];
-// }
+void FreeList::PushBlock(size_t blockSize, void* start, void* end) {
+    if(start >= end) {
+        throw std::invalid_argument("PushBlock arg err");
+    }
+    // 接下来 要把这份页空间切分成size大小的链表的形式
+
+    char* cur = (char*)start;
+    void* tail = start;
+    cur += blockSize;
+    size_t batchNum = 1;
+
+    while(cur < end) {
+        batchNum++;
+        FreeList::NextObj(tail) = cur;
+        cur += blockSize;
+        tail = FreeList::NextObj(tail);
+        // std::cout << 1 << std::endl;
+    }
+    FreeList::NextObj(tail) = nullptr;
+
+    PushRange(batchNum, start, tail);
+
+}

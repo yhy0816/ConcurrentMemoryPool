@@ -18,6 +18,8 @@ public:
         return freeLists[index];
     }
 
+    void GiveBackToCentralCache(size_t index, size_t size);
+
 private:
 
     FreeList freeLists[FREELIST_NUM];
