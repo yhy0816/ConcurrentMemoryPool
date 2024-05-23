@@ -13,8 +13,7 @@ add_executable(ConcurrentMemoryPool
                 PageCache.cpp
                 SpanList.cpp
                 ThreadCache.cpp
-                Tools.cpp
-                
+                Tools.cpp 
                 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

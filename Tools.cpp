@@ -1,14 +1,14 @@
 #include "headers/Tools.h"
 #include "headers/FreeList.h"
 #include <cstddef>
-#include <iostream>
-#define DEBUG
+// #include <iostream>
+
 
 using std::bad_alloc;
 
 
 void* systemAlloc(std::size_t size) {
-#ifdef DEBUG 
+#ifdef _GLIBCXX_IOSTREAM 
 
     std::cout << "systemAlloc(" << size << ")" << std::endl;
     

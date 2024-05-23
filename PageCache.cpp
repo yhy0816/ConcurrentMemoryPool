@@ -2,7 +2,7 @@
 #include "headers/ThreadCache.h"
 #include "headers/Tools.h"
 #include <stdexcept>
-#include <iostream>
+// #include <iostream>
 
 
 PageCache PageCache::pageCache;
